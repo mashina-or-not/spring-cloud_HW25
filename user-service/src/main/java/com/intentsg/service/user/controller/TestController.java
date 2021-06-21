@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class TestController {
 	}
 
 	@GetMapping("/ticket")
-	public void addTicket() {
+	public ResponseEntity<Ticket> addTicket() {
 		Ticket ticket = new Ticket();
 		ticket.setId("123");
 		ticket.setPlace(111);
@@ -53,7 +54,7 @@ public class TestController {
 		HttpEntity<String> request =
 				new HttpEntity<>(ticketJson.toString(), headers);
 
-		restTemplate.postForObject(serviceInstance.getUri().toString() + "/api/tickets/ticket", request, Ticket.class);
+		return restTemplate.postForEntity(serviceInstance.getUri().toString() + "/api/tickets/ticket", request, Ticket.class);
 	}
 
 	private ServiceInstance getServiceInstances() {

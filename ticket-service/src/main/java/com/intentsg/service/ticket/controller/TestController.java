@@ -28,7 +28,8 @@ public class TestController {
 	}
 
 	@PostMapping("/ticket")
-	public void addTicket(@RequestBody Ticket ticket) {
+	public ResponseEntity<Ticket> addTicket(@RequestBody Ticket ticket) {
 		ticketList.add(ticket);
+		return ResponseEntity.ok(ticket);
 	}
 }
