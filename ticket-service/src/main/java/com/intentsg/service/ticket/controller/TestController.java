@@ -1,12 +1,9 @@
 package com.intentsg.service.ticket.controller;
 
+import com.intentsg.model.Ticket;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import com.intentsg.model.Ticket;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +12,43 @@ import java.util.List;
 @RequestMapping("/tickets")
 public class TestController {
 
-	List<Ticket> ticketList = new ArrayList<>();
+    List<Ticket> ticketList = new ArrayList<>();
 
-	@GetMapping("/test")
-	public ResponseEntity test() {
-		return ResponseEntity.ok("ticket-service 8084");
-	}
+    @GetMapping("/test")
+    public ResponseEntity test() {
+        return ResponseEntity.ok("ticket-service 8084");
+    }
 
-	@GetMapping("/tickets")
-	public ResponseEntity<List<Ticket>> getTicket() {
-		return ResponseEntity.ok(ticketList);
-	}
+    @GetMapping("/tickets")
+    public ResponseEntity<List<Ticket>> getTicket() {
+        return ResponseEntity.ok(ticketList);
+    }
 
-	@PostMapping("/ticket")
-	public ResponseEntity<Ticket> addTicket(@RequestBody Ticket ticket) {
-		ticketList.add(ticket);
-		return ResponseEntity.ok(ticket);
-	}
+    @PostMapping("/ticket")
+    public ResponseEntity<Ticket> addTicket(@RequestBody Ticket ticket) {
+        ticketList.add(ticket);
+        return ResponseEntity.ok(ticket);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateTicket(@RequestBody Ticket ticket) {
+        for (Ticket t : ticketList) {
+            if (t.getId().equals(ticket.getId())) {
+                t.setPlace(ticket.getPlace());
+                return ResponseEntity.ok().build();
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteTicket(@PathVariable String id) {
+		for (Ticket t : ticketList) {
+			if (t.getId().equals(id)) {
+				ticketList.remove(t);
+				return ResponseEntity.ok().build();
+			}
+		}
+		return ResponseEntity.notFound().build();
+    }
 }
